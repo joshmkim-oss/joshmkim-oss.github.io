@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Joshua Kim, PhD — Learning Innovation, Higher Education Strategy</title>
+<meta name="description" content="Joshua Kim, PhD — Assistant Provost for Online Learning Strategy at Dartmouth, Senior Fellow at Georgetown, and author of the Learning Innovation column at Inside Higher Ed." />
+
+<!-- Open Graph / social preview -->
+<meta property="og:title" content="Joshua Kim, PhD" />
+<meta property="og:description" content="Higher education strategist, author, and the Learning Innovation columnist at Inside Higher Ed." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.joshmkim.com" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --ink:        #161B26;   /* primary dark / text */
+    --ink-soft:   #2A3242;   /* dark band secondary */
+    --paper:      #F5F4EF;   /* main light background */
+    --paper-alt:  #ECEAE1;   /* alternating sections / cards */
+    --pine:       #1F5C4D;   /* the single accent */
+    --pine-bright:#2C7A66;   /* accent hover */
+    --muted:      #5C5F66;   /* captions, secondary text */
+    --line:       rgba(22,27,38,.13);
+    --line-light: rgba(245,244,239,.16);
+    --shadow:     0 1px 2px rgba(22,27,38,.05), 0 12px 36px -18px rgba(22,27,38,.28);
+    --maxw:       1120px;
+    --prose:      62ch;
+    --display:    "Fraunces", Georgia, serif;
+    --body:       "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  /* ============ RESET / BASE ============ */
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    font-family:var(--body);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.7;
+    font-size:clamp(1rem, .96rem + .2vw, 1.08rem);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+  ::selection{ background:var(--pine); color:#fff; }
+  :focus-visible{ outline:2.5px solid var(--pine); outline-offset:3px; border-radius:2px; }
+
+  .wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(1.25rem, 5vw, 3rem); }
+
+  /* shared section rhythm */
+  .section{ padding-block:clamp(4.5rem, 9vw, 8rem); }
+  main section[id]{ scroll-margin-top:78px; }
+
+  /* eyebrow: the recurring "column rule" motif — a short pine tick + tracked label */
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:.7rem;
+    font-family:var(--body); font-weight:600; font-size:.78rem;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--pine);
+    margin-bottom:1.4rem;
+  }
+  .eyebrow::before{ content:""; width:1.8rem; height:2px; background:var(--pine); display:inline-block; }
+  .dark .eyebrow{ color:#8FD3BE; }
+  .dark .eyebrow::before{ background:#8FD3BE; }
+
+  .h-sec{ font-family:var(--display); font-weight:500; line-height:1.08;
+    font-size:clamp(1.85rem, 1.2rem + 2.6vw, 2.9rem); letter-spacing:-.01em; }
+  .lead{ color:var(--muted); max-width:var(--prose); margin-top:1.1rem; font-size:1.08rem; }
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed; inset:0 0 auto 0; z-index:50;
+    background:rgba(245,244,239,.82); backdrop-filter:saturate(140%) blur(12px);
+    border-bottom:1px solid transparent; transition:border-color .3s ease, background .3s ease;
+  }
+  .nav.scrolled{ border-bottom-color:var(--line); }
+  .nav__inner{ display:flex; align-items:center; justify-content:space-between;
+    height:64px; max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(1.25rem,5vw,3rem); }
+  .nav__mark{ font-family:var(--display); font-weight:600; font-size:1.18rem; letter-spacing:-.01em; }
+  .nav__mark b{ color:var(--pine); font-weight:600; }
+  .nav__links{ display:flex; gap:2rem; align-items:center; }
+  .nav__links a{
+    font-size:.92rem; font-weight:500; color:var(--ink); position:relative; padding-block:.4rem;
+    transition:color .2s ease;
+  }
+  .nav__links a::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:2px;
+    background:var(--pine); transform:scaleX(0); transform-origin:left; transition:transform .25s ease;
+  }
+  .nav__links a:hover{ color:var(--pine); }
+  .nav__links a.active{ color:var(--pine); }
+  .nav__links a.active::after{ transform:scaleX(1); }
+
+  .nav__toggle{ display:none; background:none; border:0; cursor:pointer; padding:.5rem;
+    width:42px; height:42px; }
+  .nav__toggle span{ display:block; width:22px; height:2px; background:var(--ink); margin:4px auto; transition:.3s; }
+  .nav__toggle[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .nav__toggle[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+  .nav__toggle[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  @media (max-width:780px){
+    .nav__toggle{ display:block; }
+    .nav__links{
+      position:absolute; top:64px; left:0; right:0; flex-direction:column; gap:0;
+      background:var(--paper); border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden; transition:max-height .35s ease;
+    }
+    .nav__links.open{ max-height:420px; }
+    .nav__links a{ padding:1rem clamp(1.25rem,5vw,3rem); width:100%; border-top:1px solid var(--line); }
+    .nav__links a::after{ display:none; }
+  }
+
+  /* ============ HERO ============ */
+  .hero{ padding-top:clamp(7rem, 12vh, 10rem); padding-bottom:clamp(3.5rem,7vw,6rem); }
+  .hero__grid{ display:grid; grid-template-columns:1.4fr .9fr; gap:clamp(2rem,5vw,4.5rem); align-items:center; }
+  .hero__name{ font-family:var(--display); font-weight:500; letter-spacing:-.018em; line-height:.98;
+    font-size:clamp(3rem, 1.5rem + 7vw, 6rem); }
+  .hero__credential{ font-family:var(--display); font-style:italic; font-weight:400; color:var(--pine);
+    font-size:clamp(1.05rem,.95rem+.4vw,1.3rem); margin-top:.5rem; }
+  .hero__role{ margin-top:1.8rem; font-size:1.18rem; font-weight:500; max-width:46ch; }
+  .hero__role span{ color:var(--muted); font-weight:400; }
+  .hero__blurb{ margin-top:1.1rem; color:var(--muted); max-width:48ch; }
+  .hero__cta{ display:flex; flex-wrap:wrap; gap:.85rem; margin-top:2.1rem; }
+
+  .btn{ display:inline-flex; align-items:center; gap:.5rem; font-weight:600; font-size:.96rem;
+    padding:.8rem 1.4rem; border-radius:999px; transition:transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease; }
+  .btn:active{ transform:translateY(1px); }
+  .btn--solid{ background:var(--pine); color:#fff; }
+  .btn--solid:hover{ background:var(--pine-bright); }
+  .btn--ghost{ border:1.5px solid var(--line); color:var(--ink); }
+  .btn--ghost:hover{ border-color:var(--pine); color:var(--pine); }
+  .btn svg{ width:15px; height:15px; }
+
+  .hero__social{ display:flex; gap:1.4rem; margin-top:1.9rem; flex-wrap:wrap; }
+  .hero__social a{ font-size:.86rem; font-weight:500; color:var(--muted); letter-spacing:.02em;
+    display:inline-flex; align-items:center; gap:.4rem; transition:color .2s ease; }
+  .hero__social a:hover{ color:var(--pine); }
+  .hero__social a::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--pine); opacity:.55; }
+
+  /* portrait with pine offset frame (signature) + monogram fallback */
+  .portrait{ position:relative; width:100%; max-width:380px; margin-inline:auto; height:0; padding-top:125%;
+    border-radius:8px; background:var(--ink-soft); box-shadow:var(--shadow); }
+  .portrait::before{ content:""; position:absolute; inset:-16px -16px 16px 16px; border:1.5px solid var(--pine);
+    border-radius:10px; z-index:-1; }
+  .portrait__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 22%; border-radius:inherit; }
+  .portrait__mono{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--display); font-size:5rem; color:#fff; opacity:.92; }
+  .portrait__mono{ position:absolute; font-family:var(--display); font-size:5rem; color:#fff; opacity:.9; }
+
+  @media (max-width:780px){
+    .hero__grid{ grid-template-columns:1fr; }
+    .portrait{ max-width:280px; margin-inline:auto; }
+    .portrait::before{ inset:-11px -11px 11px 11px; }
+  }
+
+  /* ============ ABOUT ============ */
+  .about__grid{ display:grid; grid-template-columns:1.6fr 1fr; gap:clamp(2rem,5vw,4rem); align-items:start; }
+  .about p{ max-width:var(--prose); margin-bottom:1.15rem; }
+  .about p:first-of-type{ font-size:1.15rem; }
+  .about a.inline{ color:var(--pine); font-weight:500; border-bottom:1px solid rgba(31,92,77,.32); transition:border-color .2s; }
+  .about a.inline:hover{ border-color:var(--pine); }
+  .facts{ border-top:2px solid var(--ink); padding-top:1.3rem; }
+  .facts dl{ display:grid; gap:1.1rem; }
+  .facts dt{ font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pine); font-weight:600; margin-bottom:.2rem; }
+  .facts dd{ font-size:.98rem; }
+  @media (max-width:780px){ .about__grid{ grid-template-columns:1fr; } }
+
+  /* career timeline (a real sequence) */
+  .timeline{ margin-top:clamp(3rem,5vw,4.5rem); }
+  .timeline__track{ display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:0;
+    border-top:1px solid var(--line); }
+  .step{ padding:1.5rem 1.4rem 0 0; position:relative; }
+  .step::before{ content:""; position:absolute; top:-5px; left:0; width:9px; height:9px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--pine); }
+  .step__yr{ font-family:var(--display); font-size:1.05rem; color:var(--pine); font-weight:600; }
+  .step__where{ font-weight:600; margin-top:.3rem; font-size:.98rem; }
+  .step__what{ color:var(--muted); font-size:.88rem; margin-top:.15rem; }
+  @media (max-width:900px){
+    .timeline__track{ grid-auto-flow:row; border-top:0; }
+    .step{ padding:0 0 1.6rem 1.5rem; border-left:1px solid var(--line); }
+    .step::before{ top:4px; left:-5px; }
+  }
+
+  /* ============ BOOKS ============ */
+  .books{ background:var(--paper-alt); }
+  .books__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; margin-top:clamp(2rem,4vw,3rem); }
+  .book{ background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:1.7rem 1.6rem 1.5rem;
+    display:flex; flex-direction:column; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .book:hover{ transform:translateY(-4px); box-shadow:var(--shadow); border-color:transparent; }
+  .book__yr{ font-size:.78rem; font-weight:600; letter-spacing:.12em; color:var(--pine); }
+  .book__title{ font-family:var(--display); font-weight:500; font-size:1.32rem; line-height:1.2; margin:.55rem 0 .55rem; }
+  .book__sub{ color:var(--muted); font-size:.92rem; flex-grow:1; }
+  .book__meta{ font-size:.82rem; color:var(--muted); margin-top:1.1rem; }
+  .book__link{ margin-top:1rem; font-weight:600; font-size:.9rem; color:var(--pine);
+    display:inline-flex; align-items:center; gap:.4rem; }
+  .book__link svg{ width:13px; height:13px; transition:transform .2s ease; }
+  .book:hover .book__link svg{ transform:translate(2px,-2px); }
+  @media (max-width:780px){ .books__grid{ grid-template-columns:1fr; } }
+
+  /* ============ WRITING ============ */
+  .writing__head{ display:flex; justify-content:space-between; align-items:flex-end; gap:1.5rem; flex-wrap:wrap; }
+  .stat{ text-align:right; }
+  .stat b{ font-family:var(--display); font-size:clamp(1.6rem,1.2rem+1.4vw,2.3rem); color:var(--pine); font-weight:600; display:block; line-height:1; }
+  .stat span{ font-size:.8rem; color:var(--muted); letter-spacing:.04em; }
+  .pieces{ margin-top:clamp(2rem,4vw,3rem); border-top:1px solid var(--line); }
+  .piece{ display:grid; grid-template-columns:auto 1fr auto; gap:1.5rem; align-items:baseline;
+    padding:1.6rem 0; border-bottom:1px solid var(--line); transition:background .2s ease; }
+  .piece:hover{ background:rgba(31,92,77,.04); }
+  .piece__date{ font-size:.82rem; color:var(--pine); font-weight:600; letter-spacing:.04em; white-space:nowrap; }
+  .piece__title{ display:block; font-family:var(--display); font-size:1.25rem; font-weight:500; line-height:1.25; }
+  .piece__dek{ display:block; color:var(--muted); font-size:.94rem; margin-top:.35rem; }
+  .piece__arrow{ color:var(--pine); font-size:1.3rem; transition:transform .2s ease; }
+  .piece:hover .piece__arrow{ transform:translateX(4px); }
+  @media (max-width:680px){
+    .piece{ grid-template-columns:1fr auto; }
+    .piece__date{ grid-column:1 / -1; }
+  }
+  .writing__more{ margin-top:2rem; }
+
+  /* ============ TALKS & MEDIA ============ */
+  .tm{ background:var(--paper-alt); }
+  .tm__cols{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,5vw,4rem); margin-top:clamp(2rem,4vw,3rem); }
+  .tm__col h3{ font-family:var(--display); font-weight:500; font-size:1.3rem; margin-bottom:1.2rem;
+    padding-bottom:.7rem; border-bottom:2px solid var(--ink); }
+  .tm__list{ list-style:none; display:grid; gap:1rem; }
+  .tm__list li{ display:grid; grid-template-columns:auto 1fr; gap:.9rem; font-size:.96rem; }
+  .tm__list .src{ color:var(--pine); font-weight:600; white-space:nowrap; font-size:.82rem; letter-spacing:.03em; padding-top:.12rem; }
+  .tm__list .desc{ color:var(--ink); }
+  .tm__list .desc em{ color:var(--muted); font-style:normal; font-size:.85rem; display:block; }
+  @media (max-width:780px){ .tm__cols{ grid-template-columns:1fr; } }
+
+  /* ============ CONTACT / FOOTER ============ */
+  .contact{ background:var(--ink); color:var(--paper); }
+  .contact .h-sec{ color:#fff; }
+  .contact__grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,5vw,4rem); align-items:end; }
+  .contact__lead{ color:rgba(245,244,239,.72); max-width:42ch; margin-top:1rem; }
+  .contact__email{ font-family:var(--display); font-size:clamp(1.4rem,1rem+1.8vw,2.1rem); font-weight:500;
+    color:#fff; margin-top:1.6rem; display:inline-block; max-width:100%; overflow-wrap:anywhere;
+    border-bottom:1.5px solid var(--pine-bright); padding-bottom:.15rem; transition:color .2s ease; }
+  .contact__email:hover{ color:#8FD3BE; }
+  .contact__links{ display:grid; gap:.9rem; }
+  .contact__links a{ display:inline-flex; align-items:center; gap:.7rem; color:rgba(245,244,239,.85);
+    font-weight:500; transition:color .2s ease; width:fit-content; }
+  .contact__links a:hover{ color:#8FD3BE; }
+  .contact__links a::before{ content:""; width:1.4rem; height:1px; background:var(--pine-bright); }
+  .colophon{ border-top:1px solid var(--line-light); margin-top:clamp(3rem,5vw,4.5rem); padding-top:1.6rem;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    font-size:.82rem; color:rgba(245,244,239,.5); }
+  @media (max-width:680px){ .contact__grid{ grid-template-columns:1fr; gap:2.5rem; } }
+
+  /* ============ SCROLL REVEAL ============ */
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#top" class="nav__mark">Joshua&nbsp;<b>Kim</b></a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav__links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#books">Books</a>
+      <a href="#writing">Writing</a>
+      <a href="#media">Talks &amp; Media</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero__grid">
+        <div>
+          <p class="eyebrow">Higher Education · Learning Innovation</p>
+          <h1 class="hero__name">Joshua Kim</h1>
+          <p class="hero__credential">PhD, sociology &amp; demography</p>
+          <p class="hero__role">Assistant Provost for Online Learning Strategy at Dartmouth.
+            <span>Senior Fellow at Georgetown University, and author of the <em>Learning Innovation</em> column at <em>Inside Higher Ed</em>.</span></p>
+          <p class="hero__blurb">I write and teach about the future of the university — learning innovation, online education, technology, and the demographic and economic forces reshaping higher education.</p>
+          <div class="hero__cta">
+            <a class="btn btn--solid" href="https://www.insidehighered.com/opinion/columns/learning-innovation" target="_blank" rel="noopener">
+              Read the column
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+            <a class="btn btn--ghost" href="#books">Browse the books</a>
+          </div>
+          <div class="hero__social">
+            <a href="mailto:joshua.m.kim@dartmouth.edu">Email</a>
+            <a href="https://www.linkedin.com/in/joshmkim/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://x.com/joshmkim" target="_blank" rel="noopener">X · @joshmkim</a>
+            <a href="https://provost.dartmouth.edu/people/joshua-kim" target="_blank" rel="noopener">Dartmouth profile</a>
+          </div>
+        </div>
+
+        <!-- Photo is self-hosted as headshot.jpg next to this file. To change it later,
+             replace headshot.jpg (any portrait orientation works) or update the src below. -->
+        <div class="portrait">
+          <span class="portrait__mono">JK</span>
+          <img class="portrait__img"
+               src="headshot.jpg"
+               alt="Joshua Kim"
+               loading="eager"
+               onerror="this.style.display='none'">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section about reveal" id="about">
+    <div class="wrap">
+      <p class="eyebrow">About</p>
+      <div class="about__grid">
+        <div class="about">
+          <p>Dr. Joshua Kim is the Assistant Provost for Online Learning Strategy at Dartmouth and a Senior Fellow at Georgetown University's Center for New Designs in Learning and Scholarship. His work sits at the intersection of learning science, institutional strategy, and the economics and demographics of higher education.</p>
+          <p>Josh holds a PhD in sociology and demography from Brown University. He began his career on the faculty at West Virginia University, helped launch <a class="inline" href="https://www.britannica.com" target="_blank" rel="noopener">Britannica.com</a>'s education division in San Francisco, and was one of the original founders of Quinnipiac University Online.</p>
+          <p>With Edward Maloney, he is the co-author of three books from Johns Hopkins University Press, including <a class="inline" href="https://www.press.jhu.edu/books/title/23111/recentering-learning" target="_blank" rel="noopener"><em>Recentering Learning</em></a> (2024). He is best known for the <a class="inline" href="https://www.insidehighered.com/opinion/columns/learning-innovation" target="_blank" rel="noopener"><em>Learning Innovation</em></a> column at <em>Inside Higher Ed</em>, where he regularly reviews thesis-driven nonfiction and connects it to the questions facing universities today.</p>
+          <p>Josh and his wife Julie, a pediatric oncologist at Dartmouth, live in Hanover, New Hampshire. They have two adult daughters.</p>
+        </div>
+        <aside class="facts">
+          <dl>
+            <div><dt>Role</dt><dd>Assistant Provost for Online Learning Strategy, Dartmouth</dd></div>
+            <div><dt>Also</dt><dd>Senior Fellow, Georgetown University (CNDLS)</dd></div>
+            <div><dt>Doctorate</dt><dd>PhD, Sociology &amp; Demography — Brown University</dd></div>
+            <div><dt>Based in</dt><dd>Hanover, New Hampshire</dd></div>
+            <div><dt>Writes</dt><dd><em>Learning Innovation</em> at <em>Inside Higher Ed</em></dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <!-- career sequence -->
+      <div class="timeline">
+        <div class="timeline__track">
+          <div class="step"><div class="step__yr">Brown</div><div class="step__where">PhD, Sociology &amp; Demography</div><div class="step__what">Graduate training in population &amp; social science</div></div>
+          <div class="step"><div class="step__yr">Faculty</div><div class="step__where">West Virginia University</div><div class="step__what">Began academic career as a sociologist</div></div>
+          <div class="step"><div class="step__yr">Industry</div><div class="step__where">Britannica.com</div><div class="step__what">Helped launch the education division, San Francisco</div></div>
+          <div class="step"><div class="step__yr">Founder</div><div class="step__where">Quinnipiac University Online</div><div class="step__what">Original founding team</div></div>
+          <div class="step"><div class="step__yr">Now</div><div class="step__where">Dartmouth &amp; Georgetown</div><div class="step__what">Online learning strategy; senior fellow</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BOOKS ============ -->
+  <section class="section books reveal" id="books">
+    <div class="wrap">
+      <p class="eyebrow">Books</p>
+      <h2 class="h-sec">Three books on the future of higher education.</h2>
+      <p class="lead">Co-authored with Edward Maloney and published by Johns Hopkins University Press.</p>
+      <div class="books__grid">
+        <article class="book">
+          <span class="book__yr">2024</span>
+          <h3 class="book__title">Recentering Learning</h3>
+          <p class="book__sub">Complexity, Resilience, and Adaptability in Higher Education.</p>
+          <p class="book__meta">Co-edited with Maggie Debelius &amp; Edward Maloney · JHU Press</p>
+          <a class="book__link" href="https://www.amazon.com/Recentering-Learning-Complexity-Resilience-Adaptability/dp/1421450321" target="_blank" rel="noopener">
+            Find on Amazon
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+        <article class="book">
+          <span class="book__yr">2020</span>
+          <h3 class="book__title">The Low-Density University</h3>
+          <p class="book__sub">15 Scenarios for Higher Education — a scenario-planning framework written in the first pandemic spring.</p>
+          <p class="book__meta">With Edward Maloney · JHU Press</p>
+          <a class="book__link" href="https://www.amazon.com/Low-Density-University-Scenarios-Higher-Education-ebook/dp/B08F2QPWDK/" target="_blank" rel="noopener">
+            Find on Amazon
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+        <article class="book">
+          <span class="book__yr">2020</span>
+          <h3 class="book__title">Learning Innovation and the Future of Higher Education</h3>
+          <p class="book__sub">The foundational text defining learning innovation as an emerging academic discipline.</p>
+          <p class="book__meta">With Edward Maloney · JHU Press</p>
+          <a class="book__link" href="https://www.amazon.com/Learning-Innovation-Future-Education-Tech-edu/dp/1421436639/" target="_blank" rel="noopener">
+            Find on Amazon
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WRITING ============ -->
+  <section class="section writing reveal" id="writing">
+    <div class="wrap">
+      <div class="writing__head">
+        <div>
+          <p class="eyebrow">Writing</p>
+          <h2 class="h-sec">The <em>Learning Innovation</em> column.</h2>
+          <p class="lead">A long-running column at <em>Inside Higher Ed</em> reading the future of the university through books, data, and the people doing the work.</p>
+        </div>
+        <div class="stat">
+          <b>1.9M</b>
+          <span>monthly readers at Inside Higher Ed</span>
+        </div>
+      </div>
+
+      <div class="pieces">
+        <!-- COLUMNS:START — auto-generated by .github/workflows/update-columns.yml. Anything between these markers is replaced on each run; edit the build script, not here. -->
+        <a class="piece" href="https://www.insidehighered.com/opinion/columns/learning-innovation/2026/05/21/why-read-infinity-machine-age-half-crappy-university" target="_blank" rel="noopener">
+          <span class="piece__date">May 2026</span>
+          <span>
+            <span class="piece__title">Why Read "The Infinity Machine" in the Age of Half-Crappy University AI</span>
+            <span class="piece__dek">Stepping outside our campus concerns to imagine a better higher-ed AI future — on Sebastian Mallaby's book.</span>
+          </span>
+          <span class="piece__arrow">→</span>
+        </a>
+        <a class="piece" href="https://www.insidehighered.com/opinion/columns/learning-innovation/2026/04/02/3-questions-learning-designer-jennifer-paloma" target="_blank" rel="noopener">
+          <span class="piece__date">Apr 2026</span>
+          <span>
+            <span class="piece__title">3 Questions for Learning Designer Jennifer Paloma Rafferty</span>
+            <span class="piece__dek">On career navigation, AI and learning designers, and advice for early- and midcareer professionals.</span>
+          </span>
+          <span class="piece__arrow">→</span>
+        </a>
+        <a class="piece" href="https://www.insidehighered.com/opinion/columns/learning-innovation/2026/03/31/thinking-machine-ai-higher-ed-professional-staff" target="_blank" rel="noopener">
+          <span class="piece__date">Mar 2026</span>
+          <span>
+            <span class="piece__title">"The Thinking Machine," AI, and Higher Ed Professional Staff Work</span>
+            <span class="piece__dek">Our jobs and NVIDIA — reading Stephen Witt's account of Jensen Huang and the chips behind the AI era.</span>
+          </span>
+          <span class="piece__arrow">→</span>
+        </a>
+        <!-- COLUMNS:END -->
+      </div>
+
+      <div class="writing__more">
+        <a class="btn btn--ghost" href="https://www.insidehighered.com/opinion/columns/learning-innovation" target="_blank" rel="noopener">
+          Read every column
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TALKS & MEDIA ============ -->
+  <section class="section tm reveal" id="media">
+    <div class="wrap">
+      <p class="eyebrow">Talks &amp; Media</p>
+      <h2 class="h-sec">Selected appearances.</h2>
+      <p class="lead">A sampling from two decades of keynotes, panels, and press. A complete list is available on request.</p>
+      <div class="tm__cols">
+        <div class="tm__col">
+          <h3>In the press</h3>
+          <ul class="tm__list">
+            <li><span class="src">NPR</span><span class="desc">All Things Considered — six ways college might look different<em>2020</em></span></li>
+            <li><span class="src">PBS</span><span class="desc">NewsHour — fifteen scenarios for the reopening of campuses<em>2020</em></span></li>
+            <li><span class="src">Chronicle</span><span class="desc">The Chronicle of Higher Education — "Can Higher Ed Save Itself?"<em>2021</em></span></li>
+            <li><span class="src">Boston Globe</span><span class="desc">On technology and the university after COVID-19<em>2020</em></span></li>
+            <li><span class="src">EdTech</span><span class="desc">Named among the higher-ed IT influencers to follow<em>2024</em></span></li>
+            <li><span class="src">Columbia</span><span class="desc">"Dead Ideas in Teaching and Learning" podcast<em>2021</em></span></li>
+          </ul>
+        </div>
+        <div class="tm__col">
+          <h3>Selected talks</h3>
+          <ul class="tm__list">
+            <li><span class="src">The White House</span><span class="desc">Moderated &amp; joined U.S. Dept. of Education innovation convenings<em>2014–2016</em></span></li>
+            <li><span class="src">SXSW EDU</span><span class="desc">"Breaking the University From the Inside Out" — higher-ed R&amp;D<em>2016</em></span></li>
+            <li><span class="src">Apple</span><span class="desc">Higher Education Leadership Forum — digital learning in the liberal arts<em>2018</em></span></li>
+            <li><span class="src">EDUCAUSE</span><span class="desc">Annual conference keynotes &amp; ELI leadership seminars<em>multiple</em></span></li>
+            <li><span class="src">CIC</span><span class="desc">Keynote, Consortium for Online Humanities Instruction<em>2016</em></span></li>
+            <li><span class="src">Universities</span><span class="desc">Invited talks at Brown, Georgetown, Johns Hopkins, Rutgers &amp; more<em>multiple</em></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section contact dark" id="contact">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <div class="contact__grid">
+        <div>
+          <h2 class="h-sec">Let's talk.</h2>
+          <p class="contact__lead">For writing, speaking, advising, or a question about the column — email is the best way to reach me.</p>
+          <a class="contact__email" href="mailto:joshua.m.kim@dartmouth.edu">joshua.m.kim@dartmouth.edu</a>
+        </div>
+        <div class="contact__links">
+          <a href="https://www.linkedin.com/in/joshmkim/" target="_blank" rel="noopener">LinkedIn — /in/joshmkim</a>
+          <a href="https://x.com/joshmkim" target="_blank" rel="noopener">X — @joshmkim</a>
+          <a href="https://provost.dartmouth.edu/people/joshua-kim" target="_blank" rel="noopener">Dartmouth — Office of the Provost</a>
+          <a href="https://www.insidehighered.com/opinion/columns/learning-innovation" target="_blank" rel="noopener">Inside Higher Ed — Learning Innovation</a>
+        </div>
+      </div>
+      <div class="colophon">
+        <span>© <span id="yr"></span> Joshua Kim · Hanover, New Hampshire</span>
+        <span>Built to be modern, fast, and entirely his own.</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // nav: shadow on scroll
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 12);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive:true });
+
+  // mobile menu
+  const toggle = document.getElementById('navToggle');
+  const links  = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open'); toggle.setAttribute('aria-expanded','false');
+  }));
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // active nav link by section
+  const sections = [...document.querySelectorAll('main section[id]')];
+  const navMap = {};
+  document.querySelectorAll('.nav__links a').forEach(a => navMap[a.getAttribute('href').slice(1)] = a);
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        Object.values(navMap).forEach(a => a.classList.remove('active'));
+        if (navMap[e.target.id]) navMap[e.target.id].classList.add('active');
+      }
+    });
+  }, { rootMargin:'-45% 0px -50% 0px' });
+  sections.forEach(s => spy.observe(s));
+</script>
+</body>
+</html>
