@@ -1,0 +1,49 @@
+name: Update Learning Innovation columns
+
+# Joshua publishes on Tuesdays and Thursdays. Times are UTC (GitHub requirement).
+# Eastern is UTC-4 in summer (EDT) / UTC-5 in winter (EST), so these runs cover
+# midday, late afternoon, the same evening, and the next morning on both days.
+on:
+  schedule:
+    - cron: "0 16 * * 2,4"   # Tue & Thu ~12pm ET
+    - cron: "0 21 * * 2,4"   # Tue & Thu ~5pm ET
+    - cron: "30 1 * * 3,5"   # late Tue/Thu evening ET (catches evening posts)
+    - cron: "0 12 * * 3,5"   # Wed & Fri ~8am ET (catches overnight posts)
+  workflow_dispatch:          # adds a "Run workflow" button for on-demand refreshes
+
+# Let the built-in token push the updated index.html back to the repo.
+permissions:
+  contents: write
+
+# Never let two runs overlap.
+concurrency:
+  group: update-columns
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh columns from Inside Higher Ed
+        run: python3 scripts/update_columns.py
+
+      - name: Commit and publish if anything changed
+        run: |
+          if [[ -n "$(git status --porcelain index.html)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Auto-update Learning Innovation columns"
+            git push
+            echo "Published updated columns."
+          else
+            echo "No new columns — nothing to publish."
+          fi
